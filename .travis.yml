@@ -17,6 +17,6 @@ install:
   - composer install
 
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test travis '' localhost $WP_VERSION
+  - bash bin/install-wp-tests.sh wordpress_test travis ''  localhost $WP_VERSION
 
 script: phpunit
