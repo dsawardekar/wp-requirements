@@ -7,6 +7,8 @@ require_once(__DIR__ .  '/../../lib/MyWordPressPlugin/Requirements.php');
 
 class PHPRequirementTest extends \PHPUnit_Framework_TestCase {
 
+  public $requirement;
+
   function setUp() {
     $this->requirement = new PHPRequirement();
   }
@@ -33,6 +35,8 @@ class PHPRequirementTest extends \PHPUnit_Framework_TestCase {
 
 class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
 
+  public $requirement;
+
   function setUp() {
     $this->requirement = new WordPressRequirement();
   }
@@ -44,7 +48,7 @@ class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_knows_if_minimum_wordpress_requirement_is_not_met() {
-    $version = $this->changeWordPressVersion('1.0.0');
+    $this->changeWordPressVersion('1.0.0');
     $this->requirement->minimumVersion = '3.8.1';
     $actual = $this->requirement->check();
 
@@ -52,7 +56,7 @@ class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_knows_if_minimum_wordpress_requirement_is_met() {
-    $version = $this->changeWordPressVersion('5.0.0');
+    $this->changeWordPressVersion('5.0.0');
     $this->requirement->minimumVersion = '4.2.1';
     $actual = $this->requirement->check();
 
@@ -60,7 +64,7 @@ class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_has_error_message_for_unmet_wordpress_requirement() {
-    $version = $this->changeWordPressVersion('5.0.0');
+    $this->changeWordPressVersion('5.0.0');
     $this->requirement->minimumVersion = '10.1.1';
     $actual = $this->requirement->message();
     $this->assertRegExp('/10.1.1/', $actual);
@@ -69,6 +73,8 @@ class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
 }
 
 class PHPExtensionRequirementTest extends \PHPUnit_Framework_TestCase {
+
+  public $requirement;
 
   function setUp() {
     $this->requirement = new PHPExtensionRequirement();
@@ -100,6 +106,8 @@ class PHPExtensionRequirementTest extends \PHPUnit_Framework_TestCase {
 
 class MinRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
 
+  public $requirements;
+
   function setUp() {
     $this->requirements = new MinRequirements();
   }
@@ -111,21 +119,21 @@ class MinRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_knows_if_minimum_requirements_are_not_satisfied() {
-    $wordpressVersion = $this->changeWordPressVersion('1.0.1');
+    $this->changeWordPressVersion('1.0.1');
     $actual = $this->requirements->satisfied();
 
     $this->assertFalse($actual);
   }
 
   function test_it_knows_if_minimum_requirements_are_satisfied() {
-    $wordpressVersion = $this->changeWordPressVersion('10.0.1');
+    $this->changeWordPressVersion('10.0.1');
     $actual = $this->requirements->satisfied();
 
     $this->assertTrue($actual);
   }
 
   function test_it_has_results_of_minimum_requirements_check() {
-    $wordpressVersion = $this->changeWordPressVersion('1.0.1');
+    $this->changeWordPressVersion('1.0.1');
     $actual = $this->requirements->satisfied();
     $results = $this->requirements->getResults();
 
@@ -139,6 +147,8 @@ class MinRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
 
 class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
 
+  public $requirements;
+
   function setUp() {
     $this->requirements = new ModernRequirements();
   }
@@ -150,7 +160,7 @@ class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_knows_if_modern_requirements_are_not_satisfied() {
-    $wordpressVersion = $this->changeWordPressVersion('1.0.1');
+    $this->changeWordPressVersion('1.0.1');
     $actual = $this->requirements->satisfied();
 
     $this->assertFalse($actual);
@@ -163,7 +173,7 @@ class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
       return;
     }
 
-    $wordpressVersion = $this->changeWordPressVersion('10.0.1');
+    $this->changeWordPressVersion('10.0.1');
     $actual = $this->requirements->satisfied();
 
     $this->assertTrue($actual);
@@ -172,17 +182,20 @@ class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
 
 class FauxPluginTest extends \WP_UnitTestCase {
 
+  public $pluginFile;
+  public $plugin;
+
   function setUp() {
     parent::setUp();
 
     $this->pluginFile = getcwd() . '/foo.php';
     $this->plugin = new FauxPlugin(
-      'wp-syntax-highlighter', array('foo')
+      'my-wordpress-plugin', array('foo')
     );
   }
 
   function test_it_stores_plugin_name() {
-    $this->assertEquals('wp-syntax-highlighter', $this->plugin->pluginName);
+    $this->assertEquals('my-wordpress-plugin', $this->plugin->pluginName);
   }
 
   function test_it_stores_requirements_results() {
@@ -336,11 +349,6 @@ class FauxPluginTest extends \WP_UnitTestCase {
       'requirement' => $requirement
     );
     array_push($results, $result);
-
-    $matcher = array(
-      'tag' => 'div',
-      'attributes' => array('class' => 'error')
-    );
 
     $this->setExpectedException('MyWordPressPlugin\RequirementsException');
     $this->plugin->results = $results;
