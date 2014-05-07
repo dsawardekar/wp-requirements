@@ -217,9 +217,7 @@ class FauxPlugin {
   }
 
   function resultToNotice($result) {
-    $satisfied = $result['satisfied'];
     $message   = $result['requirement']->message();
-
     return "<li>$message</li>";
   }
 
