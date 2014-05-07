@@ -157,6 +157,12 @@ class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
   }
 
   function test_it_knows_if_modern_requirements_are_satisfied() {
+    // don't check for modern requirements on travis
+    // running against older version of PHP
+    if (getenv('TRAVIS') && version_compare(phpversion(), '5.5', '<')) {
+      return;
+    }
+
     $wordpressVersion = $this->changeWordPressVersion('10.0.1');
     $actual = $this->requirements->satisfied();
 
