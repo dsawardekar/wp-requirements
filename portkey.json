@@ -1,10 +1,10 @@
 {
-  "lib/MyWordPressPlugin/*.php": {
+  "lib/*.php": {
     "type": "library",
-    "test": "test/MyWordPressPlugin/%sTest.php"
+    "test": "test/%sTest.php"
   },
-  "test/MyWordPressPlugin/*Test.php": {
+  "test/*Test.php": {
     "type": "test",
-    "alternate": "lib/MyWordPressPlugin/%s.php"
+    "alternate": "lib/%s.php"
   }
 }

@@ -15,7 +15,7 @@ requirements in WordPress plugins.
 
 # Getting Started
 
-The library comes with a `MinRequirements` class that can be used to
+The library comes with a `WP_Min_Requirements` class that can be used to
 detect some basic system requirements like WordPress and PHP versions.
 
 First we create a new instance of the class and call it's `satisfied`
@@ -24,7 +24,7 @@ instantiate your plugin inside it.
 
 ```php
 <?php
-$requirements = new MinRequirements();
+$requirements = new WP_Min_Requirements();
 
 if ($requirements->satisfied()) {
   // minimum requirements satisfied
@@ -33,7 +33,7 @@ if ($requirements->satisfied()) {
 ```
 
 Next we need to handle the case when the minimum requirements are not
-satisfied. The library comes with a `FauxPlugin` that does this by
+satisfied. The library comes with a `WP_Faux_Plugin` that does this by
 notifying the user that the minimum requirements are not satisfied.
 
 All you need to do is create it and passing it the name of your plugin
@@ -41,12 +41,12 @@ and the results object from the requirements.
 
 ```php
 <?php
-$requirements = new MinRequirements();
+$requirements = new WP_Min_Requirements();
 
 if ($requirements->satisified()) {
   // create your plugin here
 } else {
-  $fauxPlugin = new FauxPlugin('My Plugin Name', $requirements->getResults());
+  $fauxPlugin = new WP_Faux_Plugin('My Plugin Name', $requirements->getResults());
   $fauxPlugin->enable(__FILE__);
 }
 ```
@@ -56,26 +56,26 @@ above.
 
 ## Detecting Specific Versions of PHP & WordPress
 
-To create custom requirements you extend the `Requirements` class and
+To create custom requirements you extend the `WP_Requirements` class and
 provide a custom `getRequirements` method. It should return an array of
 requirement objects.
 
-Below is the `MinRequirements` class that matches against PHP 5.3.2 and
+Below is the `WP_Min_Requirements` class that matches against PHP 5.3.2 and
 WordPress 3.5.
 
 ```php
 <?php
-class MinRequirements extends Requirements {
+class WP_Min_Requirements extends WP_Requirements {
 
   function getRequirements() {
     $requirements = array();
 
     // Min requirements for Composer
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->minimumVersion = '5.3.2';
     array_push($requirements, $requirement);
 
-    $requirement = new WordPressRequirement();
+    $requirement = new WP_WordPress_Requirement();
     $requirement->minimumVersion = '3.5.0';
     array_push($requirements, $requirement);
 
@@ -98,7 +98,7 @@ For example to check if the `Akismet` plugin is in use,
 
 ```php
 <?php
-class AkismetRequirement {
+class Akismet_Requirement {
 
   function check() {
     return is_plugin_active('akismet/akismet.php');
@@ -111,16 +111,16 @@ class AkismetRequirement {
 }
 ```
 
-Then wrap this up into a new class that extends the `Requirements` class
+Then wrap this up into a new class that extends the `WP_Requirements` class
 and put this requirement into use.
 
 ```php
 <?php
-class MyCustomRequirements extends Requirements {
+class My_Custom_Requirements extends WP_Requirements {
 
   function getRequirements() {
     $requirements = array();
-    array_push($requirements, new AkismetRequirement());
+    array_push($requirements, new Akismet_Requirement());
 
     return $requirements;
   }
@@ -130,10 +130,10 @@ class MyCustomRequirements extends Requirements {
 
 ## Other Requirements
 
-Use the [ModernRequirements][3] class to ensure that PHP 5.5 and required
+Use the [WP_Modern_Requirements][3] class to ensure that PHP 5.5 and required
 extensions are present.
 
-To test the requirements message, use the [FailingRequirements][4] class instead.
+To test the requirements message, use the [WP_Failing_Requirements][4] class instead.
 
 ## Usage
 
@@ -141,12 +141,21 @@ The library and all it's classes are bundled inside the
 [Requirements.php][9] file.
 
 1. Copy the [Requirements.php][9] file into your project.
-1. Replace the default namespace `MyWordPressPlugin` to match your
-   plugin.
-1. Use `require_once` to include the project into your plugin's main
+1. Use `require_once` to include this file into your plugin's main
    file.
 1. Instantiate the Requirements object and call it's `satisfied` method
    as described above.
+
+## Making Changes
+
+Please send pull requests instead of changing the requirements file
+directly inside your project.
+
+If you must make modifications to the `Requirements.php` do so my
+renaming the `WP_` prefix to something unique like your company name.
+
+Eg:- `Acme_Requirements`. A find and replace for `WP_` to `Acme_` will
+do the trick.
 
 ## Examples
 
@@ -177,10 +186,10 @@ MIT License. Copyright © 2014 Darshan Sawardekar
 
 [1]: http://i.imgur.com/0d9d6HF.png
 [2]: https://github.com/nvie/gitflow
-[3]: https://github.com/dsawardekar/wp-requirements/blob/develop/lib/MyWordPressPlugin/Requirements.php#L61
-[4]: https://github.com/dsawardekar/wp-requirements/blob/develop/lib/MyWordPressPlugin/Requirements.php#L87
+[3]: https://github.com/dsawardekar/wp-requirements/blob/develop/lib/Requirements.php#L61
+[4]: https://github.com/dsawardekar/wp-requirements/blob/develop/lib/Requirements.php#L87
 [5]: https://github.com/dsawardekar/sample-requirements-plugin
 [6]: https://github.com/dsawardekar/sample-woocommerce-requirements-plugin
 [7]: http://www.squarepenguin.com/wordpress/?p=6
 [8]: https://travis-ci.org
-[9]: https://raw.githubusercontent.com/dsawardekar/wp-requirements/master/lib/MyWordPressPlugin/Requirements.php
+[9]: https://raw.githubusercontent.com/dsawardekar/wp-requirements/master/lib/Requirements.php
