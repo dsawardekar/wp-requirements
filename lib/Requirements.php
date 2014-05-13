@@ -1,8 +1,6 @@
 <?php
 
-namespace MyWordPressPlugin;
-
-class Requirements {
+class WP_Requirements {
 
   protected $results = array();
 
@@ -39,17 +37,17 @@ class Requirements {
 
 }
 
-class MinRequirements extends Requirements {
+class WP_Min_Requirements extends WP_Requirements {
 
   function getRequirements() {
     $requirements = array();
 
     // Min requirements for Composer
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->minimumVersion = '5.3.2';
     array_push($requirements, $requirement);
 
-    $requirement = new WordPressRequirement();
+    $requirement = new WP_WordPress_Requirement();
     $requirement->minimumVersion = '3.5.0';
     array_push($requirements, $requirement);
 
@@ -58,20 +56,20 @@ class MinRequirements extends Requirements {
 
 }
 
-class ModernRequirements extends Requirements {
+class WP_Modern_Requirements extends WP_Requirements {
 
   function getRequirements() {
     $requirements = array();
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->minimumVersion = '5.5.0';
     array_push($requirements, $requirement);
 
-    $requirement = new WordPressRequirement();
+    $requirement = new WP_WordPress_Requirement();
     $requirement->minimumVersion = '3.8.0';
     array_push($requirements, $requirement);
 
-    $requirement = new PHPExtensionRequirement();
+    $requirement = new WP_PHP_Extension_Requirement();
     $requirement->extensions = array(
       'mysql', 'mysqli', 'session', 'pcre',
       'json', 'gd', 'mbstring', 'phar', 'zlib'
@@ -84,16 +82,16 @@ class ModernRequirements extends Requirements {
 }
 
 // For Testing
-class FailingRequirements extends Requirements {
+class WP_Failing_Requirements extends WP_Requirements {
 
   function getRequirements() {
     $requirements = array();
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->minimumVersion = '100.0.0';
     array_push($requirements, $requirement);
 
-    $requirement = new WordPressRequirement();
+    $requirement = new WP_WordPress_Requirement();
     $requirement->minimumVersion = '100.0.0';
     array_push($requirements, $requirement);
 
@@ -101,7 +99,7 @@ class FailingRequirements extends Requirements {
   }
 }
 
-class PHPRequirement {
+class WP_PHP_Requirement {
 
   public $minimumVersion = '5.3.2';
 
@@ -117,7 +115,7 @@ class PHPRequirement {
   }
 }
 
-class WordPressRequirement {
+class WP_WordPress_Requirement {
 
   public $minimumVersion = '3.5.0';
 
@@ -138,7 +136,7 @@ class WordPressRequirement {
   }
 }
 
-class PHPExtensionRequirement {
+class WP_PHP_Extension_Requirement {
 
   public $extensions = array();
   public $notFound = array();
@@ -164,7 +162,7 @@ class PHPExtensionRequirement {
 
 }
 
-class FauxPlugin {
+class WP_Faux_Plugin {
 
   public $pluginName;
   public $results;
@@ -189,7 +187,7 @@ class FauxPlugin {
       echo $message;
       $this->quit();
     } else {
-      throw new RequirementsException();
+      throw new WP_Requirements_Exception();
     }
   }
 
@@ -240,6 +238,6 @@ class FauxPlugin {
   }
 }
 
-class RequirementsException extends \Exception {
+class WP_Requirements_Exception extends \Exception {
 
 }

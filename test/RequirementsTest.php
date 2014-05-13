@@ -1,16 +1,13 @@
 <?php
 
-namespace MyWordPressPlugin;
+require_once(__DIR__ .  '/../lib/Requirements.php');
 
-//# since this class is not autoloaded
-require_once(__DIR__ .  '/../../lib/MyWordPressPlugin/Requirements.php');
-
-class PHPRequirementTest extends \PHPUnit_Framework_TestCase {
+class WP_PHP_Requirement_Test extends \PHPUnit_Framework_TestCase {
 
   public $requirement;
 
   function setUp() {
-    $this->requirement = new PHPRequirement();
+    $this->requirement = new WP_PHP_Requirement();
   }
 
   function test_it_knows_if_minimum_php_requirement_is_not_met() {
@@ -33,12 +30,12 @@ class PHPRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 }
 
-class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
+class WP_WordPress_Requirement_Test extends \PHPUnit_Framework_TestCase {
 
   public $requirement;
 
   function setUp() {
-    $this->requirement = new WordPressRequirement();
+    $this->requirement = new WP_WordPress_Requirement();
   }
 
   function changeWordPressVersion($version) {
@@ -72,12 +69,12 @@ class WordPressRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 }
 
-class PHPExtensionRequirementTest extends \PHPUnit_Framework_TestCase {
+class WP_PHP_Extension_Requirement_Test extends \PHPUnit_Framework_TestCase {
 
   public $requirement;
 
   function setUp() {
-    $this->requirement = new PHPExtensionRequirement();
+    $this->requirement = new WP_PHP_Extension_Requirement();
   }
 
   function test_it_knows_if_required_extensions_are_absent() {
@@ -104,12 +101,12 @@ class PHPExtensionRequirementTest extends \PHPUnit_Framework_TestCase {
   }
 }
 
-class MinRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
+class WP_Min_Requirements_Unit_Test extends \PHPUnit_Framework_TestCase {
 
   public $requirements;
 
   function setUp() {
-    $this->requirements = new MinRequirements();
+    $this->requirements = new WP_Min_Requirements();
   }
 
   function changeWordPressVersion($version) {
@@ -145,12 +142,12 @@ class MinRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
+class WP_Modern_Requirements_Unit_Test extends \PHPUnit_Framework_TestCase {
 
   public $requirements;
 
   function setUp() {
-    $this->requirements = new ModernRequirements();
+    $this->requirements = new WP_Modern_Requirements();
   }
 
   function changeWordPressVersion($version) {
@@ -180,7 +177,7 @@ class ModernRequirementsUnitTest extends \PHPUnit_Framework_TestCase {
   }
 }
 
-class FauxPluginTest extends \WP_UnitTestCase {
+class WP_Faux_Plugin_Test extends \WP_UnitTestCase {
 
   public $pluginFile;
   public $plugin;
@@ -189,7 +186,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
     parent::setUp();
 
     $this->pluginFile = getcwd() . '/foo.php';
-    $this->plugin = new FauxPlugin(
+    $this->plugin = new WP_Faux_Plugin(
       'my-wordpress-plugin', array('foo')
     );
   }
@@ -223,7 +220,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
   }
 
   function test_it_can_convert_result_to_notice() {
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
 
     $result = array(
@@ -242,7 +239,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
   function test_it_can_convert_results_to_notice() {
     $results = array();
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => true,
@@ -250,7 +247,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
     );
     array_push($results, $result);
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => false,
@@ -293,14 +290,14 @@ class FauxPluginTest extends \WP_UnitTestCase {
       $plugin->showError('foo');
     };
 
-    $this->setExpectedException('MyWordPressPlugin\RequirementsException');
+    $this->setExpectedException('WP_Requirements_Exception');
     $func();
   }
 
   function test_it_displays_error_on_activation_if_scraping() {
     $results = array();
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => true,
@@ -308,7 +305,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
     );
     array_push($results, $result);
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => false,
@@ -334,7 +331,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
   function test_it_triggers_error_on_activation_if_not_scraping() {
     $results = array();
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => true,
@@ -342,7 +339,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
     );
     array_push($results, $result);
 
-    $requirement = new PHPRequirement();
+    $requirement = new WP_PHP_Requirement();
     $requirement->check();
     $result = array(
       'satisfied' => false,
@@ -350,7 +347,7 @@ class FauxPluginTest extends \WP_UnitTestCase {
     );
     array_push($results, $result);
 
-    $this->setExpectedException('MyWordPressPlugin\RequirementsException');
+    $this->setExpectedException('WP_Requirements_Exception');
     $this->plugin->results = $results;
 
     $this->plugin->onActivate();
