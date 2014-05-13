@@ -1,5 +1,8 @@
 <?php
 
+/* Note: not a duplicate, this is an implicit test to verify the
+ * class_exists conditional */
+require_once(__DIR__ .  '/../lib/Requirements.php');
 require_once(__DIR__ .  '/../lib/Requirements.php');
 
 class WP_PHP_Requirement_Test extends \PHPUnit_Framework_TestCase {
