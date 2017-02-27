@@ -115,7 +115,7 @@ if ( class_exists( 'WP_Requirements' ) === false ) {
 		function message() {
 			$version = phpversion();
 			
-			return sprintf( WP_Requirements::_t( "PHP %d+ Required, Detected %d" ), $this->minimumVersion, $version );
+			return sprintf( WP_Requirements::_t( "PHP %s+ Required, Detected %s" ), $this->minimumVersion, $version );
 		}
 	}
 	
@@ -137,7 +137,7 @@ if ( class_exists( 'WP_Requirements' ) === false ) {
 		function message() {
 			$version = $this->getWordPressVersion();
 			
-			return sprintf( WP_Requirements::_t( "WordPress %d+ Required, Detected %d" ), $this->minimumVersion, $version );
+			return sprintf( WP_Requirements::_t( "WordPress %s+ Required, Detected %s" ), $this->minimumVersion, $version );
 		}
 	}
 	
